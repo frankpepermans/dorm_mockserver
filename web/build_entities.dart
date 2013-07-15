@@ -140,7 +140,7 @@ String create(File file, String fileContent) {
           contents += '\t@LabelField()\r';
         }
         
-        contents += '\tProxy<${propertyMap['type']}> _${propertyMap['name']};\r\r';
+        contents += '\tDormProxy<${propertyMap['type']}> _${propertyMap['name']};\r\r';
         contents += "\tstatic const String ${propertyMap['name'].toUpperCase()} = '${propertyMap['name']}';\r";
         contents += "\tstatic const Symbol ${propertyMap['name'].toUpperCase()}_SYMBOL = const Symbol('orm_domain.${entityMap['name']}.${propertyMap['name']}');\r\r";
         contents += '\t${propertyMap['type']} get ${propertyMap['name']} => _${propertyMap['name']}.value;\r';
