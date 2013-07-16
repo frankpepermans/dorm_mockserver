@@ -6,7 +6,7 @@ void main() {
   loadDefinitions();
 }
 
-void createDomainFile(List<String> classes, List<String> entityClassNames) {
+void createDomainFile(List<String> classes, List<List<String>> entityClassNamesAndRefs) {
   Directory directory = new Directory('../../dorm/example/orm_domain');
   
   if (!directory.existsSync()) {
@@ -17,8 +17,6 @@ void createDomainFile(List<String> classes, List<String> entityClassNames) {
   File domainFile = new File('../../dorm/example/orm_domain/orm_domain.dart');
   
   contents += 'library orm_domain;\r\r';
-  contents += "@MirrorsUsed(symbols: '${entityClassNames.join(',')}', override: '*')\r";
-  contents += "import 'dart:mirrors';\r";
   contents += "import 'package:dorm/dorm.dart';\r";
   contents += "import 'package:observe/observe.dart';\r\r";
   
@@ -31,8 +29,8 @@ void createDomainFile(List<String> classes, List<String> entityClassNames) {
   contents += 'void ormInitialize() {\r';
   contents += '\tEntityAssembler assembler = new EntityAssembler();\r\r';
   
-  entityClassNames.forEach(
-    (String entityClassName) => contents += '\tassembler.scan(${entityClassName});\r'    
+  entityClassNamesAndRefs.forEach(
+    (List<String> entityClassName) => contents += "\tassembler.scan(${entityClassName[0]}, '${entityClassName[1]}', ${entityClassName[0]}.construct);\r"    
   );
   
   contents += '}\r';
@@ -44,7 +42,7 @@ void createDomainFile(List<String> classes, List<String> entityClassNames) {
   );
 }
 
-String create(File file, String fileContent) {
+List<String> create(File file, String fileContent) {
   Map entityMap = parse(fileContent);
   
   List<String> tmp = file.path.replaceAll(new RegExp('[^a-zA-Z0-9_]+'), '.').split('.');
@@ -152,6 +150,7 @@ String create(File file, String fileContent) {
   contents += addBigBlock('Constructor');
   
   contents += '\t${entityMap['name']}() : super();\r\r';
+  contents += '\tstatic ${entityMap['name']} construct() {\r\t\treturn new ${entityMap['name']}();\r\t}\r\r';
   
   contents += '}';
   
@@ -169,7 +168,7 @@ String create(File file, String fileContent) {
       }
   );
   
-  return entityMap['name'];
+  return [entityMap['name'], ref];
 }
 
 String addSmallBlock(String blockName) {
@@ -204,7 +203,7 @@ Future<List<FileSystemEntity>> getDefinitionFiles(Directory dir) {
 
 void getDefinitionFiles_completeHandler(List<FileSystemEntity> result) {
   List<String> classes = <String>[];
-  List<String> entityClassNames = <String>[];
+  List<List<String>> entityClassNamesAndRefs = <List<String>>[];
   
   result.forEach(
       (File file) {
@@ -219,14 +218,14 @@ void getDefinitionFiles_completeHandler(List<FileSystemEntity> result) {
         
         classes.add(partA);
         
-        String entityClassName = create(
+        List<String> entityClassNameAndRef = create(
             file, 
             file.readAsStringSync(encoding: Encoding.UTF_8)
         );
         
-        entityClassNames.add(entityClassName);
+        entityClassNamesAndRefs.add(entityClassNameAndRef);
       }
   );
   
-  createDomainFile(classes, entityClassNames);
+  createDomainFile(classes, entityClassNamesAndRefs);
 }
