@@ -149,7 +149,34 @@ List<String> create(File file, String fileContent) {
   
   contents += addBigBlock('Constructor');
   
-  contents += '\t${entityMap['name']}() : super();\r\r';
+  
+  
+  if (entityMap.containsKey('properties')) {
+    List<Map> properties = entityMap['properties'];
+    List<String> toRegister = <String>[];
+    
+    contents += '\t${entityMap['name']}() : super() {\r';
+    
+    contents += '\t\tEntityAssembler assembler = new EntityAssembler();\r\r';
+    
+    properties.forEach(
+        (Map propertyMap) {
+          toRegister.add('_${propertyMap['name']}');
+          
+          contents += '\t\t_${propertyMap['name']} = new DormProxy()\r';
+          contents += "\t\t..property = '${propertyMap['name']}'\r";
+          contents += "\t\t..propertySymbol = ${propertyMap['name'].toUpperCase()}_SYMBOL;\r\r";
+        }
+    );
+    
+    contents += '\t\tassembler.registerProxies(this, <DormProxy>[${toRegister.join(', ')}]);\r';
+    
+    contents += '}\r\r';
+  } else {
+    contents += '\t${entityMap['name']}() : super();\r\r';
+  }
+  
+  
   contents += '\tstatic ${entityMap['name']} construct() {\r\t\treturn new ${entityMap['name']}();\r\t}\r\r';
   
   contents += '}';
