@@ -78,13 +78,13 @@ List<String> create(File file, String fileContent) {
     contents += 'class ${entityMap['name']} extends Entity {';
   }
   
-  contents += '\r';
-  contents += '\r';
+  contents += '\r\r';
+  contents += addBigBlock('Public properties');
+  contents += addSmallBlock('refClassName');
+  contents += "\tString get refClassName => '$ref';\r\r";
   
   if (entityMap.containsKey('properties')) {
     List<Map> properties = entityMap['properties'];
-    
-    contents += addBigBlock('Public properties');
     
     properties.forEach(
       (Map propertyMap) {
