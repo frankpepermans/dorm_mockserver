@@ -1,2 +1,5 @@
 name: dorm_mockserver
 description: A sample web application
+dependencies:
+  http_server: any
+  mime: any

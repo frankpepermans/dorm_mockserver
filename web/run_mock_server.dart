@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:json';
 import 'dart:typed_data';
+import 'package:http_server/http_server.dart';
 import 'package:dorm_mockserver/dorm_mockserver.dart';
 
 void main() {
@@ -62,10 +63,10 @@ void main() {
                   request.response.write(responseContent);
                   
                   request.response.close();
-                }
+                }, onError: (Error error) => print(error.toString())
             );
-           }
+           }, onError: (Error error) => print(error.toString())
       );
-    }
+    }, onError: (Error error) => print(error.toString())
   );
 }
