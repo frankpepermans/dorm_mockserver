@@ -100,6 +100,19 @@ List<String> create(File file, String fileContent) {
           contents += '\t@NotNullable()\r';
         }
         
+        bool isLazy = false;
+        
+        if (
+            propertyMap.containsKey('fetch-type') &&
+            (propertyMap['fetch-type'] == 'lazy')
+        ) {
+          contents += '\t@Lazy()\r';
+          
+          //propertyMap['type'] = 'Future<${propertyMap['type']}>';
+          
+          isLazy = true;
+        }
+        
         if (propertyMap.containsKey('insert-when')) {
           contents += '\t@DefaultValue(${propertyMap['insert-when']})\r';
         }
