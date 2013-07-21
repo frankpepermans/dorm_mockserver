@@ -49,7 +49,7 @@ class CommitService extends BaseService {
             );
           }
           
-          File tableFile = new File('../bin/dbo/dbo_${tableName}.json');
+          File tableFile = new File('../dbo/dbo/dbo_${tableName}.json');
           
           tableFile.writeAsStringSync(stringify(table), mode:FileMode.WRITE, encoding:Encoding.UTF_8);
           

@@ -9,7 +9,7 @@ class JsonDatabase {
   Map<String, Map<String, dynamic>> _cache;
   
   List<Definition> getDefinitions() {
-    Directory dir = new Directory('../bin/entities');
+    Directory dir = new Directory('../dbo/entities');
     Definition definition;
     
     List<Definition> definitions = <Definition>[];
@@ -173,7 +173,7 @@ class JsonDatabase {
   
   Map<String, dynamic> getTable(String tableName) {
     Completer completer = new Completer();
-    File tableFile = new File('../bin/dbo/dbo_${tableName}.json');
+    File tableFile = new File('../dbo/dbo/dbo_${tableName}.json');
     
     return parse(tableFile.readAsStringSync(encoding: Encoding.UTF_8));
   }

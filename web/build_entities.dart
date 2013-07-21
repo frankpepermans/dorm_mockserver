@@ -90,7 +90,7 @@ List<String> create(File file, String fileContent) {
       (Map propertyMap) {
         contents += addSmallBlock(propertyMap['name']);
         
-        contents += "\t@Property(${propertyMap['name'].toUpperCase()}_SYMBOL, '${propertyMap['name']}')\r";
+        contents += "\t@Property(${propertyMap['name'].toUpperCase()}_SYMBOL, '${propertyMap['name']}', ${propertyMap['type'].replaceAll(new RegExp('<[^<]+?>'), '')})\r";
         
         if (
             propertyMap.containsKey('identity') &&
@@ -220,7 +220,7 @@ String addBigBlock(String blockName) {
 }
 
 void loadDefinitions() {
-  Directory dir = new Directory('../bin/entities');
+  Directory dir = new Directory('../dbo/entities');
   
   Future<List<FileSystemEntity>> listing = getDefinitionFiles(dir);
   
