@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:json';
+import 'dart:convert';
 
 void main() {
   loadDefinitions();
@@ -37,13 +37,13 @@ void createDomainFile(List<String> classes, List<List<String>> entityClassNamesA
   
   domainFile.create().then(
       (File createdFile) {
-        createdFile.writeAsString(contents, mode:FileMode.WRITE , encoding:Encoding.UTF_8);
+        createdFile.writeAsString(contents, mode:FileMode.WRITE , encoding:Encoding.getByName('utf-8'));
       }
   );
 }
 
 List<String> create(File file, String fileContent) {
-  Map entityMap = parse(fileContent);
+  Map entityMap = JSON.decode(fileContent);
   
   List<String> tmp = file.path.replaceAll(new RegExp('[^a-zA-Z0-9_]+'), '.').split('.');
   
@@ -204,7 +204,7 @@ List<String> create(File file, String fileContent) {
   
   clientFile.create().then(
       (File createdFile) {
-        createdFile.writeAsString(contents, mode:FileMode.WRITE , encoding:Encoding.UTF_8);
+        createdFile.writeAsString(contents, mode:FileMode.WRITE , encoding:Encoding.getByName('utf-8'));
       }
   );
   
@@ -260,7 +260,7 @@ void getDefinitionFiles_completeHandler(List<FileSystemEntity> result) {
         
         List<String> entityClassNameAndRef = create(
             file, 
-            file.readAsStringSync(encoding: Encoding.UTF_8)
+            file.readAsStringSync(encoding: Encoding.getByName('utf-8'))
         );
         
         entityClassNamesAndRefs.add(entityClassNameAndRef);
