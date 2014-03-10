@@ -13,7 +13,7 @@ class CommitService extends BaseService {
     
     dataToCommit.forEach(
         (String commitEntry) {
-          Map<String, dynamic> commitEntryMap = parse(commitEntry);
+          Map<String, dynamic> commitEntryMap = JSON.decode(commitEntry);
           String type = commitEntryMap['?t'];
           String entityName = dbo.getEntityNameFromDefinitionsByType(type);
           String pkField = dbo.getPrimaryKeyField(entityName, false);
@@ -51,7 +51,7 @@ class CommitService extends BaseService {
           
           File tableFile = new File('../dbo/dbo/dbo_${tableName}.json');
           
-          tableFile.writeAsStringSync(stringify(table), mode:FileMode.WRITE, encoding:Encoding.UTF_8);
+          tableFile.writeAsStringSync(JSON.encode(table), mode:FileMode.WRITE, encoding:Encoding.getByName('utf-8'));
           
           response.add(
               dbo.ormEntityLoad(
@@ -62,7 +62,7 @@ class CommitService extends BaseService {
         }
     );
     
-    return stringify(response);
+    return JSON.encode(response);
   }
   
 }

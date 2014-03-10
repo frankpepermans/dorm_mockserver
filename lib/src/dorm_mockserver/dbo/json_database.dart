@@ -27,8 +27,8 @@ class JsonDatabase {
           String partA = tmp.removeLast();
           
           definition.type = '${tmp.removeLast()}.$partA';
-          definition.definition = parse(
-              file.readAsStringSync(encoding: Encoding.UTF_8)  
+          definition.definition = JSON.decode(
+              file.readAsStringSync(encoding: Encoding.getByName('utf-8'))  
           );
           
           definitions.add(definition);
@@ -175,7 +175,7 @@ class JsonDatabase {
     Completer completer = new Completer();
     File tableFile = new File('../dbo/dbo/dbo_${tableName}.json');
     
-    return parse(tableFile.readAsStringSync(encoding: Encoding.UTF_8));
+    return JSON.decode(tableFile.readAsStringSync(encoding: Encoding.getByName('utf-8')));
   }
   
   List<Map<String, dynamic>> getTableRows(String tableName) {

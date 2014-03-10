@@ -1,4 +1,4 @@
 name: dorm_mockserver
 description: A sample web application
 dependencies:
-  http_server: any
+  http_server: 0.9.1

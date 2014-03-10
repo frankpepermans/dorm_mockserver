@@ -14,7 +14,7 @@ class FetchService extends BaseService {
         entityId:entityId
     );
     
-    return stringify(result);
+    return JSON.encode(result);
   }
   
   String ormEntityLoad(String entityName, Map<String, String> where) {
@@ -42,11 +42,11 @@ class FetchService extends BaseService {
           }
       );
       
-      return stringify(result);
+      return JSON.encode(result);
     } else {
       result = dbo.ormEntityLoad(entityName);
       
-      return stringify(result);
+      return JSON.encode(result);
     }
   }
   
